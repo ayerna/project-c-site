@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   environment {
-    ECR_REPO = "709436855390.dkr.ecr.ap-south-1.amazonaws.com/project-a"
+    ECR_REPO = "709436855390.dkr.ecr.ap-south-1.amazonaws.com/project-c"
     REGION = "ap-south-1"
   }
 
@@ -10,13 +10,13 @@ pipeline {
 
     stage('Build Docker Image') {
       steps {
-        sh 'docker build -t project-a .'
+        sh 'docker build -t project-c .'
       }
     }
 
     stage('Tag Image') {
       steps {
-        sh 'docker tag project-a:latest $ECR_REPO:latest'
+        sh 'docker tag project-c:latest $ECR_REPO:latest'
       }
     }
 
@@ -40,7 +40,7 @@ pipeline {
       steps {
         sh '''
           kubectl apply -f deployment.yaml
-          kubectl rollout restart deployment web-a -n project-a
+          kubectl rollout restart deployment web-c -n project-c
           '''
           }
       }
