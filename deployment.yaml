@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-a
+  namespace: project-a
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web-a
+  template:
+    metadata:
+      labels:
+        app: web-a
+    spec:
+      containers:
+      - name: web
+        image: 709436855390.dkr.ecr.ap-south-1.amazonaws.com/project-a:latest
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: ecr-secret
