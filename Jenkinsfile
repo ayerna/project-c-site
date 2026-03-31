@@ -2,8 +2,8 @@ pipeline {
   agent any
 
   environment {
-    ECR_REPO = "public.ecr.aws/d0z6a9w2/project-c"
-    REGION = "ap-south-1"
+    ECR_PUBLIC_REPO = "public.ecr.aws/d0z6a9w2/project-c"
+    REGION = "us-east-1"
   }
 
   stages {
@@ -16,23 +16,23 @@ pipeline {
 
     stage('Tag Image') {
       steps {
-        sh 'docker tag project-c:latest $ECR_REPO:latest'
+        sh 'docker tag project-c:latest $ECR_PUBLIC_REPO:latest'
       }
     }
 
-    stage('Login to ECR') {
+    stage('Login to ECR Public') {
       steps {
         sh '''
-        aws ecr get-login-password --region $REGION \
+        aws ecr-public get-login-password --region $REGION \
         | docker login --username AWS \
-        --password-stdin $ECR_REPO
+        --password-stdin public.ecr.aws
         '''
       }
     }
 
     stage('Push Image') {
       steps {
-        sh 'docker push $ECR_REPO:latest'
+        sh 'docker push $ECR_PUBLIC_REPO:latest'
       }
     }
 
@@ -41,9 +41,9 @@ pipeline {
         sh '''
           kubectl apply -f deployment.yaml
           kubectl rollout restart deployment web-c -n project-c
-          '''
-          }
+        '''
       }
+    }
 
   }
 }
