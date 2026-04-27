@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-c
+  namespace: project-c
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web-c
+  template:
+    metadata:
+      labels:
+        app: web-c
+    spec:
+      containers:
+      - name: web
+        image: public.ecr.aws/d0z6a9w2/project-c:latest
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: ecr-secret
